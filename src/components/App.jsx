@@ -9,75 +9,72 @@ export class App extends Component {
     page: 1,
     searchResult: [],
     loadMore: false,
-    searchQuery: '',
+    value: '',
   };
 
-  handleSubmit = (searchQuery, { resetForm }) => {
-    console.log('App onSubmit', searchQuery);
+  componentDidUpdate(prevProps, prevState) {
+    // console.log(this.state.searchResult, prevState.searchResult);
+  }
+
+  handleSubmit = (searchQuery, page) => {
+    console.log('App onSubmit =', searchQuery);
 
     const APIKEY = '28108593-121c85f8532d16352eac042b7';
 
+    // if (this.state.searchResult === searchQuery) {
     if (searchQuery) {
       fetch(
-        `https://pixabay.com/api/?q=${searchQuery}&page=1&key=${APIKEY}&image_type=photo&orientation=horizontal&per_page=12`
+        `https://pixabay.com/api/?q=${searchQuery}&page=${page}&key=${APIKEY}&image_type=photo&orientation=horizontal&per_page=12`
       )
         .then(res => res.json())
         .then(res => {
-          // props.onSubmit(res.hits, searchQuery);
-          this.setState({ searchResult: res.hits });
-          this.setState({ searchQuery: searchQuery });
-          // res.hits.length > 0 ? this.setState({ loadMore: true }) : null;
+          console.log(res.hits.length > 11 && res.totalHits > 12);
+          this.setState({
+            searchResult: [...this.state.searchResult, ...res.hits],
+          });
+          this.setState({ page: this.state.page + 1 });
+
+          if (res.hits.length > 11 && res.totalHits > 12) {
+            this.setState({ loadMore: true });
+          }
+
+          // console.log(this.state.searchResult);
         });
-
-      resetForm();
     }
-
-    // this.setState({ searchResult: array });
-    // this.setState({ serchQuery: serchQuery });
-
-    // if (array.length > 0) {
-    //   this.setState({ loadMore: true });
+    // } else {
+    // this.setState({
+    //   page: 1,
+    //   searchResult: [],
+    //   loadMore: false,
+    //   value: '',
+    // });
     // }
   };
 
   handleChange = e => {
-    console.log('App onChange', e.target.value);
+    // console.log('App onChange', e.target.value);
     this.setState({ value: e.target.value });
   };
 
-  // loadMoreClick = () => {
-  //   console.log('click on loadMoreBtn');
-  // };
+  loadMoreClick = e => {
+    // console.log('click on loadMoreBtn', this.state.page);
 
-  // componentDidUpdate(prevProps, prevState) {
-  //   // console.log('App prevProps => ', prevProps);
-  //   // console.log('App prevState => ', prevState);
+    // if (this.state.searchResult !== this.state.value) {
+    //   return this.setState({
+    //     page: 1,
+    //     searchResult: [],
+    //     loadMore: false,
+    //     value: '',
+    //   });
+    // }
+    this.handleSubmit(this.state.value, this.state.page);
+  };
 
-  //   if (prevState.searchResult !== this.state.searchResult) {
-  //     console.log(
-  //       'update app',
-  //       prevState.searchResult,
-  //       this.state.searchResult
-  //     );
-  //     return fetch(
-  //       `https://pixabay.com/api/?q=${this.state.serchQuery}&page=1&key=${APIKEY}&image_type=photo&orientation=horizontal&per_page=12`
-  //     )
-  //       .then(res => res.json())
-  //       .then(res => {
-  //         // console.log(res.hits);
-  //         // initialValues.searchResult = res.hits;
-  //         // props.onSubmit(res.hits);
-  //         // console.log(initialValues);
-  //       });
+  // componentDidUpdate(prevProps, prevState) {}
 
-  //     // return this.setState({ loadMore: true });
-  //   }
-  //   // this.setState({ loadMore: false });
-  // }
-
-  // componentDidMount = () => {
-  //   console.log('did mount');
-  // };
+  componentDidMount = () => {
+    // console.log('did mount');
+  };
 
   render() {
     return (
@@ -89,10 +86,14 @@ export class App extends Component {
             page={this.state.page}
             value={this.state.value}
           />
-          <ImageGallery images={this.state.searchResult} />
+          <ImageGallery
+            images={this.state.searchResult}
+            page={this.state.page}
+          />
           <LoadMoreButton
             onClick={this.loadMoreClick}
             buttonStatus={this.state.loadMore}
+            images={this.state.searchResult}
           />
         </>
       </div>

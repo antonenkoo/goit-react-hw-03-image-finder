@@ -1,28 +1,22 @@
 import React from 'react';
-// import { Formik } from 'formik';
 import '../styles.css';
 
 const ImageGalleryItem = props => {
-  // if (props.image) {
-  // console.log('HAHAHHAAHHAH', props.images);
+  // console.log('images in ImageGalleryItem', props.images);
+
   return (
     <>
-      {props.images.map(img => {
-        // console.log(img);
-        return (
-          <li className="ImageGalleryItem" key={img.id}>
-            <img
-              className="ImageGalleryItem-image"
-              src={img.webformatURL}
-              alt={img.tags[0]}
-              id={img.id}
-            />
-          </li>
-        );
-      })}
+      <li className="ImageGalleryItem" key={props.images.tags}>
+        <img
+          key={props.images.tags}
+          className="ImageGalleryItem-image"
+          src={props.images.webformatURL}
+          alt={props.images.tags}
+          id={props.images.id}
+        />
+      </li>
     </>
   );
-  // }
 };
 
 export default ImageGalleryItem;

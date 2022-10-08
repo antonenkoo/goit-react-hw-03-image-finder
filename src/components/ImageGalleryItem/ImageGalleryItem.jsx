@@ -6,13 +6,11 @@ const ImageGalleryItem = props => {
 
   return (
     <>
-      <li className="ImageGalleryItem" key={props.images.tags}>
+      <li className="ImageGalleryItem">
         <img
-          key={props.images.tags}
           className="ImageGalleryItem-image"
           src={props.images.webformatURL}
           alt={props.images.tags}
-          id={props.images.id}
         />
       </li>
     </>

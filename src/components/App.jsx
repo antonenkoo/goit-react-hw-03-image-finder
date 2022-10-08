@@ -13,22 +13,30 @@ export class App extends Component {
   };
 
   componentDidUpdate(prevProps, prevState) {
-    // console.log(this.state.searchResult, prevState.searchResult);
+    // console.log(this.state.searchResult.length, 'in update');
+    // console.log(this.state.searchResult.length > 1);
+    // this.state.searchResult.length > 1
+    //   ? this.setState({ loadMore: true })
+    //   : this.setState({ loadMore: false });
+    // if (prevState.searchResult.length !== this.state.searchResult.length) {
+    //   if (this.state.searchResult.length > 1) {
+    //     this.setState({ loadMore: true });
+    //   }
+    //   this.setState({ loadMore: false });
+    // }
   }
 
   handleSubmit = (searchQuery, page) => {
-    console.log('App onSubmit =', searchQuery);
+    // console.log('App onSubmit =', searchQuery);
 
     const APIKEY = '28108593-121c85f8532d16352eac042b7';
 
-    // if (this.state.searchResult === searchQuery) {
     if (searchQuery) {
       fetch(
         `https://pixabay.com/api/?q=${searchQuery}&page=${page}&key=${APIKEY}&image_type=photo&orientation=horizontal&per_page=12`
       )
         .then(res => res.json())
         .then(res => {
-          console.log(res.hits.length > 11 && res.totalHits > 12);
           this.setState({
             searchResult: [...this.state.searchResult, ...res.hits],
           });
@@ -37,40 +45,18 @@ export class App extends Component {
           if (res.hits.length > 11 && res.totalHits > 12) {
             this.setState({ loadMore: true });
           }
-
-          // console.log(this.state.searchResult);
         });
+      // console.log(this.state.searchResult.length, 'in submit ');
     }
-    // } else {
-    // this.setState({
-    //   page: 1,
-    //   searchResult: [],
-    //   loadMore: false,
-    //   value: '',
-    // });
-    // }
   };
 
   handleChange = e => {
-    // console.log('App onChange', e.target.value);
     this.setState({ value: e.target.value });
   };
 
   loadMoreClick = e => {
-    // console.log('click on loadMoreBtn', this.state.page);
-
-    // if (this.state.searchResult !== this.state.value) {
-    //   return this.setState({
-    //     page: 1,
-    //     searchResult: [],
-    //     loadMore: false,
-    //     value: '',
-    //   });
-    // }
     this.handleSubmit(this.state.value, this.state.page);
   };
-
-  // componentDidUpdate(prevProps, prevState) {}
 
   componentDidMount = () => {
     // console.log('did mount');

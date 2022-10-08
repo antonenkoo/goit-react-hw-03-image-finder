@@ -9,7 +9,7 @@ const ImageGalery = props => {
     <Formik>
       <ul className="ImageGallery">
         {props.images.map(img => (
-          <ImageGalleryItem images={img} />
+          <ImageGalleryItem images={img} key={img.id} />
         ))}
       </ul>
     </Formik>

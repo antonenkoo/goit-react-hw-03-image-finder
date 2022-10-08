@@ -206,4 +206,9 @@ img {
   background-color: #303f9f;
 }
 
-
+/* 
+* Стили компонента Loader
+*/
+.Loader {
+  display: flex;
+}

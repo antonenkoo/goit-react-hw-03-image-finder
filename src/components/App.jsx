@@ -23,22 +23,39 @@ export class App extends Component {
     // }
   }
 
-  handleSubmit = (searchQuery, page) => {
-    // const APIKEY = '28108593-121c85f8532d16352eac042b7';
-
-    if (searchQuery) {
-      FetchFn(searchQuery, page).then(res => {
+  handleSubmit = async (searchQuery, page) => {
+    try {
+      this.setState({ loader: true });
+      return await FetchFn(searchQuery, page).then(res => {
         this.setState({
           searchResult: [...this.state.searchResult, ...res.hits],
           page: this.state.page + 1,
           loader: true,
-        }); 
+        });
 
         if (res.hits.length > 11 && res.totalHits > 12) {
           this.setState({ loadMore: true });
         }
       });
+    } catch (error) {
+    } finally {
+      this.setState({ loader: false });
     }
+    // if (searchQuery) {
+    //   FetchFn(searchQuery, page)
+    //     .then(res => {
+    //       this.setState({
+    //         searchResult: [...this.state.searchResult, ...res.hits],
+    //         page: this.state.page + 1,
+    //         loader: true,
+    //       });
+
+    //       if (res.hits.length > 11 && res.totalHits > 12) {
+    //         this.setState({ loadMore: true });
+    //       }
+    //     })
+    //     .finally(this.setState({ loader: false }));
+    // }
   };
 
   handleChange = e => {

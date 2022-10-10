@@ -13,6 +13,7 @@ export class App extends Component {
   state = {
     value: '',
     page: 1,
+    currentSearchQuery: '',
     searchResult: [],
     loadMore: false,
     loader: false,
@@ -20,13 +21,32 @@ export class App extends Component {
   };
 
   handleSubmit = async (searchQuery, page) => {
+    if (this.state.currentSearchQuery !== searchQuery) {
+      try {
+        this.setState({ loader: true });
+        return await FetchFn(searchQuery, 1).then(res => {
+          this.setState({
+            searchResult: res.hits,
+            page: this.state.page + 1,
+            currentSearchQuery: searchQuery,
+          });
+
+          if (res.hits.length > 11 && res.totalHits > 12) {
+            this.setState({ loadMore: true });
+          }
+        });
+      } catch (error) {
+      } finally {
+        this.setState({ loader: false });
+      }
+    }
     try {
       this.setState({ loader: true });
-
       return await FetchFn(searchQuery, page).then(res => {
         this.setState({
           searchResult: [...this.state.searchResult, ...res.hits],
           page: this.state.page + 1,
+          currentSearchQuery: searchQuery,
         });
 
         if (res.hits.length > 11 && res.totalHits > 12) {

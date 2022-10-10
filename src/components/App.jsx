@@ -11,7 +11,7 @@ import Loader from './Loader/Loader';
 
 export class App extends Component {
   state = {
-    value: 'sad',
+    value: '',
     page: 1,
     searchResult: [],
     loadMore: false,

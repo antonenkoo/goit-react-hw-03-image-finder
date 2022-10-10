@@ -40,7 +40,6 @@ export class App extends Component {
   };
 
   handleClick = largeImage => {
-    console.log('click on img', largeImage);
     this.setState({ modalLargeImage: largeImage, modal: true });
   };
 

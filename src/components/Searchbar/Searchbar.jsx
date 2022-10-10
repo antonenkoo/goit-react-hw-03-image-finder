@@ -13,7 +13,6 @@ const Searchbar = props => {
 
   const handleSubmit = (values, { resetForm }) => {
     values = initialValues.searchQuery;
-    // console.log('handleSubmit SearchBar =', values);
     if (values) {
       props.onSubmit(values, initialValues.page);
     }

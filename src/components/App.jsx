@@ -1,36 +1,32 @@
 import React, { Component } from 'react';
+
 import Searchbar from './Searchbar/Searchbar';
 import ImageGallery from './ImageGallery/ImageGallery';
 import LoadMoreButton from './Button/Button';
 import FetchFn from './api/api';
+import Modal from './Modal/Modal';
 
 import './styles.css';
 import Loader from './Loader/Loader';
 
 export class App extends Component {
   state = {
+    value: 'sad',
     page: 1,
     searchResult: [],
     loadMore: false,
-    value: '',
     loader: false,
+    modalLargeImage: '',
   };
-
-  componentDidUpdate(prevProps, prevState) {
-    // this.setState(this.setState({ loader: false }));
-    // if (prevState.searchResult !== this.state.searchResult) {
-    //   this.setState(this.setState({ loader: false }));
-    // }
-  }
 
   handleSubmit = async (searchQuery, page) => {
     try {
       this.setState({ loader: true });
+
       return await FetchFn(searchQuery, page).then(res => {
         this.setState({
           searchResult: [...this.state.searchResult, ...res.hits],
           page: this.state.page + 1,
-          loader: true,
         });
 
         if (res.hits.length > 11 && res.totalHits > 12) {
@@ -41,33 +37,23 @@ export class App extends Component {
     } finally {
       this.setState({ loader: false });
     }
-    // if (searchQuery) {
-    //   FetchFn(searchQuery, page)
-    //     .then(res => {
-    //       this.setState({
-    //         searchResult: [...this.state.searchResult, ...res.hits],
-    //         page: this.state.page + 1,
-    //         loader: true,
-    //       });
+  };
 
-    //       if (res.hits.length > 11 && res.totalHits > 12) {
-    //         this.setState({ loadMore: true });
-    //       }
-    //     })
-    //     .finally(this.setState({ loader: false }));
-    // }
+  handleClick = largeImage => {
+    console.log('click on img', largeImage);
+    this.setState({ modalLargeImage: largeImage, modal: true });
   };
 
   handleChange = e => {
     this.setState({ value: e.target.value });
   };
 
-  loadMoreClick = e => {
+  loadMoreClick = () => {
     this.handleSubmit(this.state.value, this.state.page);
   };
 
-  componentDidMount = () => {
-    // console.log('did mount');
+  modalClose = () => {
+    this.setState({ modal: false });
   };
 
   render() {
@@ -86,6 +72,7 @@ export class App extends Component {
             <ImageGallery
               images={this.state.searchResult}
               page={this.state.page}
+              onClick={this.handleClick}
             />
           )}
 
@@ -94,6 +81,13 @@ export class App extends Component {
             buttonStatus={this.state.loadMore}
             images={this.state.searchResult}
           />
+
+          {this.state.modal && (
+            <Modal
+              largeImage={this.state.modalLargeImage}
+              onClose={this.modalClose}
+            />
+          )}
         </>
       </div>
     );

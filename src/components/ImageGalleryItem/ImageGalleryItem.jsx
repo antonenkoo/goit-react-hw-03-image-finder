@@ -2,8 +2,6 @@ import React from 'react';
 import '../styles.css';
 
 const ImageGalleryItem = props => {
-  // console.log('images in ImageGalleryItem', props.images);
-
   return (
     <>
       <li className="ImageGalleryItem">
@@ -11,6 +9,7 @@ const ImageGalleryItem = props => {
           className="ImageGalleryItem-image"
           src={props.images.webformatURL}
           alt={props.images.tags}
+          onClick={() => props.onClick(props.images.largeImageURL)}
         />
       </li>
     </>

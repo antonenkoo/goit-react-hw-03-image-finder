@@ -4,12 +4,11 @@ import ImageGalleryItem from '../ImageGalleryItem/ImageGalleryItem';
 import '../styles.css';
 
 const ImageGalery = props => {
-  // console.log('imgs in ImageGallery', props.images);
   return (
     <Formik>
       <ul className="ImageGallery">
         {props.images.map(img => (
-          <ImageGalleryItem images={img} key={img.id} />
+          <ImageGalleryItem images={img} key={img.id} onClick={props.onClick} />
         ))}
       </ul>
     </Formik>

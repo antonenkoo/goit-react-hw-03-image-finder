@@ -40,8 +40,8 @@ export class App extends Component {
         this.setState({ loader: false });
       }
     }
+
     try {
-      this.setState({ loader: true });
       return await FetchFn(searchQuery, page).then(res => {
         this.setState({
           searchResult: [...this.state.searchResult, ...res.hits],
@@ -67,7 +67,7 @@ export class App extends Component {
     this.setState({ value: e.target.value });
   };
 
-  loadMoreClick = () => {
+  loadMoreClick = async () => {
     this.handleSubmit(this.state.value, this.state.page);
   };
 

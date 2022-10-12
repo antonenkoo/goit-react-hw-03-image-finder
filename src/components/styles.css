@@ -206,3 +206,11 @@ img {
   background-color: #303f9f;
 }
 
+/* 
+* Стили компонента Button (Load more)
+*/
+.Loader {
+  margin: 100px;
+  display: flex;
+  justify-content: center;
+}

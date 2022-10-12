@@ -42,6 +42,7 @@ export class App extends Component {
     }
 
     try {
+      this.setState({ loader: true });
       return await FetchFn(searchQuery, page).then(res => {
         this.setState({
           searchResult: [...this.state.searchResult, ...res.hits],
@@ -85,21 +86,21 @@ export class App extends Component {
             page={this.state.page}
             value={this.state.value}
           />
+
+          <ImageGallery
+            images={this.state.searchResult}
+            page={this.state.page}
+            onClick={this.handleClick}
+          />
           {this.state.loader ? (
             <Loader />
           ) : (
-            <ImageGallery
+            <LoadMoreButton
+              onClick={this.loadMoreClick}
+              buttonStatus={this.state.loadMore}
               images={this.state.searchResult}
-              page={this.state.page}
-              onClick={this.handleClick}
             />
           )}
-
-          <LoadMoreButton
-            onClick={this.loadMoreClick}
-            buttonStatus={this.state.loadMore}
-            images={this.state.searchResult}
-          />
 
           {this.state.modal && (
             <Modal
